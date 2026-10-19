@@ -25,16 +25,8 @@ export const ENDPOINTS = Object.fromEntries(
 export function resolveUrl(name) {
   const ep = ENDPOINTS[name]
   if (!ep) throw new Error(`Unknown endpoint: ${name}`)
-
-  if (import.meta.env.DEV) {
-    return `/__${ep.host}/${ep.path}`
-  }
-
-  if (ep.host === 'live') {
-    return `/api/live/${ep.path}`
-  }
-
-  return `${BASE}/${ep.path}`
+  const root = import.meta.env.DEV ? `/__${ep.host}` : ep.host === 'live' ? LIVE : BASE
+  return `${root}/${ep.path}`
 }
 
 export const WITH_CREDENTIALS = import.meta.env.VITE_WITH_CREDENTIALS === 'true'
